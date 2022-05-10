@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+}
+
+// 2022.05.10 group 재지정 org.example -> com.jojoldu.book
+//group 'org.example'
+group 'com.jojoldu.book'
+version '1.0-SNAPSHOT'
+
+// 2022.05.10 추가
+sourceCompatibility = 1.8
+
+// 아래 buildscript 작성을 위해 repositories/dependencies 주석 처리
+//repositories {
+//    mavenCentral()
+//}
+//
+//dependencies {
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+//}
+
+// 2022.05.10 추가
+buildscript {
+    // ext: build.gradle에서 사용하는 전역변수 설정, springBootVersion 전역변수 생성하고 그 값을 '2.1.7.RELEASE' 로 하겠다는 의미.
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
