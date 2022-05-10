@@ -30,12 +30,24 @@ repositories {
 
 // dependencies : 프로젝트 개발에 필요한 의존성을 선언하는 곳.
 dependencies {
-    // 아래와 같이 compile, testCompile을 사용하니 build 시 오류가 발생했다.
-    // compile, testCompile, runtime, testRuntime은 gradle 7.0부터 삭제되었는데.. 현재 사용 중인 gralde이 7.4 버전이다..
-    // 삭제된 명령어는 각각 다음과 같이 대체 되었음
-    // implementation, testImplementation, runtimeOnly, testRuntimeOnly
+    /*
+        아래와 같이 compile, testCompile을 사용하니 build 시 오류가 발생했다.
+        compile, testCompile, runtime, testRuntime은 gradle 7.0부터 삭제되었는데.. 현재 사용 중인 gralde이 7.4 버전이다..
+        삭제된 명령어는 각각 다음과 같이 대체 되었음
+        implementation, testImplementation, runtimeOnly, testRuntimeOnly
+     */
 //    compile('org.springframework.boot:spring-boot-starter-web')
 //    testCompile('org.springframework.boot:spring-boot-starter-test')
     implementation('org.springframework.boot:spring-boot-starter-web')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    // 이렇게하면 실제 빌드 시 오류가 발생한다 - error: variable name not initialized in the default constructor
+    // 이유는 gradle이 버전 5로 올라가면서 롬복 추가하는 방법이 바뀌었기 때문이다.
+//    implementation('org.projectlombok:lombok')  // gradle 버전 5이하인 경우
+    compileOnly('org.projectlombok:lombok') // gradle 버전 5 이상인 경우
+    testCompileOnly('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
 }
