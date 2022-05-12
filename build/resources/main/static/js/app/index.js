@@ -58,9 +58,9 @@ var main = {
     },
     // 삭제
     delete : function () {
-        alert('삭제 스크립트 호출!') ;
+//        alert('삭제 스크립트 호출!') ;
         var id = $('#id').val() ;
-        alert('id: ' + id) ;
+//        alert('id: ' + id) ;
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/posts/'+id,

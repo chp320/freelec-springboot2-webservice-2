@@ -1,9 +1,13 @@
 package com.jojoldu.book.springboot.web;
 
+import com.jojoldu.book.springboot.config.auth.SecurityConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -14,13 +18,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = HelloController.class)
+/* @WebMvcTest 주석처리 이유:
+ * @WebMvcTest 는 @ControllerAdvice, @Controller를 읽고,
+ * @Repository, @Service, @Component는 스캔 대상이 아니다.
+ * SpringSecurity 처리를 위한 SecurityConfig는 읽었지만,
+ * 이를 생성하기 위해 필요한 CustomOAuth2UserService를 읽을 수 없어서 아래 에러 발생
+ * 에러
+ * No qualifying bean of type 'com.jojoldu.book.springboot.config.auth.CustomOAuth2UserService' available
+ * 따라서 아예 SecurityConfig를 스캔하지 않도록 수정
+ */
+//@WebMvcTest(controllers = HelloController.class)
+@WebMvcTest(controllers = HelloController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 public class HelloControllerTest {
 
     @Autowired
     private MockMvc mvc ;
 
     @Test
+    @WithMockUser(roles = "USER")
     public void hello가_리턴된다() throws Exception {
         String hello = "hello" ;
 
@@ -30,6 +45,7 @@ public class HelloControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     public void helloDto가_리턴된다() throws Exception {
         String name = "hello" ;
         int amount = 1000 ;
