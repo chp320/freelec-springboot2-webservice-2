@@ -63,4 +63,7 @@ dependencies {
 
     // 스프링 시큐리티 테스트 지원을 위한 의존성 설정
     testImplementation('org.springframework.security:spring-security-test')
+
+    // MariaDB 드라이버 사용을 위한 의존성 설정
+    implementation('org.mariadb.jdbc:mariadb-java-client')
 }
