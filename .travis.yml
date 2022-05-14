@@ -15,10 +15,21 @@ cache:
 script: "./gradlew clean build"
 
 # Travis CI에서 빌드하여 만든 jar 파일을 AWS S3에 올릴 수 있도록 설정
+#########################################################
+# 배포에 불필요한 파일 제거를 위해 before_deploy 항목 수정
+#########################################################
+#before_deploy:
+#  - zip -r freelec-springboot2-webservice *
+#  - mkdir -p deploy
+#  - mv freelec-springboot2-webservice.zip deploy/freelec-springboot2-webservice.zip
 before_deploy:
-  - zip -r freelec-springboot2-webservice *
-  - mkdir -p deploy
-  - mv freelec-springboot2-webservice.zip deploy/freelec-springboot2-webservice.zip
+  - mkdir -p before-deploy  # zip에 포함시킬 파일들을 담기 위한 디렉토리 생성
+  - cp scripts/*.sh before-deploy
+  - cp appspec.yml before-deploy
+  - cp build/libs/*.jar before-deploy
+  - cd before-deploy && zip -r before-deploy *  # before-deploy로 이동 후 전체 압축
+  - cd ../ && mkdir -p deploy # 상위 디렉토리로 이동 후 deploy 디렉토리 생성
+  - mv before-deploy/before-deploy.zip deploy/freelec-springboot2-webservice.zip  # deploy로 zip파일 이동
 
 deploy:
   - provider: s3
