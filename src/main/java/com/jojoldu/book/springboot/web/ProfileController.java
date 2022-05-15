@@ -36,7 +36,9 @@ public class ProfileController {
         for(String realProfile : realProfiles) {
             System.out.println(">> realProfile: " + realProfile);
         }
-        String defaultProfile = profiles.isEmpty()? "default" : profiles.get(0) ;   // profile 첫 번째 row에 적재된 값을 defaultProfile로 설정
+
+        // profile 첫 번째 row에 적재된 값을 defaultProfile로 설정
+        String defaultProfile = profiles.isEmpty()? "default" : profiles.get(0) ;
         System.out.println(">> defaultProfile: " + defaultProfile) ;
 
         return profiles.stream()
